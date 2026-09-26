@@ -1,0 +1,2 @@
+# Smart-canteen
+GROUP PROJECT
