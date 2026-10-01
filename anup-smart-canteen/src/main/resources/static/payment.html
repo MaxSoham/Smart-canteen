@@ -1,0 +1,438 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Smart Canteen - Payment</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #222;
+    }
+
+    .navbar {
+      background: #111827;
+      color: white;
+      padding: 16px 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 14px;
+    }
+
+    .container {
+      width: 92%;
+      max-width: 650px;
+      margin: 50px auto;
+    }
+
+    .payment-card {
+      background: white;
+      padding: 35px;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+
+    .title {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .title h1 {
+      margin-bottom: 8px;
+      font-size: 30px;
+    }
+
+    .title p {
+      color: #666;
+    }
+
+    .order-summary {
+      background: #f8fafc;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 12px 0;
+    }
+
+    .amount {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    select {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 15px;
+      background: white;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 22px;
+      border: none;
+      border-radius: 8px;
+      background: #111827;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #374151;
+    }
+
+    button:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+    }
+
+    .message {
+      text-align: center;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    .success {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .success-icon {
+      font-size: 55px;
+    }
+
+    .success h2 {
+      margin-bottom: 8px;
+    }
+
+    .secondary-button {
+      background: #e5e7eb;
+      color: #111827;
+      margin-top: 12px;
+    }
+
+    .secondary-button:hover {
+      background: #d1d5db;
+    }
+
+    @media (max-width: 600px) {
+
+      .navbar {
+        padding: 15px 5%;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .container {
+        margin: 30px auto;
+      }
+
+      .payment-card {
+        padding: 25px 20px;
+      }
+
+      .title h1 {
+        font-size: 25px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+
+  <div class="logo">
+    🍴 Smart Canteen
+  </div>
+
+  <div class="nav-links">
+    <a href="menu.html">Menu</a>
+    <a href="orders.html">My Orders</a>
+  </div>
+
+</nav>
+
+<div class="container">
+
+  <div class="payment-card">
+
+    <div class="title">
+
+      <h1>💳 Complete Payment</h1>
+
+      <p>
+        Secure your canteen order
+      </p>
+
+    </div>
+
+    <div id="paymentContent">
+
+      <div class="order-summary">
+
+        <div class="summary-row">
+
+          <span>Order ID</span>
+
+          <strong id="orderId">
+            Loading...
+          </strong>
+
+        </div>
+
+        <div class="summary-row">
+
+          <span>Total Amount</span>
+
+          <span class="amount">
+                        ₹<span id="orderAmount">0.00</span>
+                    </span>
+
+        </div>
+
+      </div>
+
+      <label for="paymentMethod">
+        Select Payment Method
+      </label>
+
+      <select id="paymentMethod">
+
+        <option value="UPI">
+          UPI
+        </option>
+
+        <option value="Cash">
+          Cash
+        </option>
+
+        <option value="Card">
+          Card
+        </option>
+
+      </select>
+
+      <button
+              id="payButton"
+              onclick="makePayment()">
+
+        Pay Now
+
+      </button>
+
+      <div
+              id="message"
+              class="message">
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+  const studentId =
+          localStorage.getItem("studentId");
+
+  const orderId =
+          localStorage.getItem("orderId");
+
+  const orderAmount =
+          localStorage.getItem("orderAmount");
+
+
+  if (!studentId) {
+
+    window.location.href = "login.html";
+
+  }
+
+
+  if (!orderId || !orderAmount) {
+
+    alert("No active order found.");
+
+    window.location.href = "menu.html";
+
+  }
+
+
+  document.getElementById("orderId").innerText =
+          orderId;
+
+  document.getElementById("orderAmount").innerText =
+          Number(orderAmount).toFixed(2);
+
+
+  function makePayment() {
+
+    const paymentMethod =
+            document.getElementById("paymentMethod").value;
+
+    const button =
+            document.getElementById("payButton");
+
+    const message =
+            document.getElementById("message");
+
+    button.disabled = true;
+
+    button.innerText =
+            "Processing Payment...";
+
+    message.innerText = "";
+
+
+    fetch("/api/payment/add", {
+
+      method: "POST",
+
+      headers: {
+
+        "Content-Type":
+                "application/json"
+
+      },
+
+      body: JSON.stringify({
+
+        orderId: parseInt(orderId),
+
+        paymentMethod:
+        paymentMethod,
+
+        paymentStatus:
+                "Paid"
+
+      })
+
+    })
+
+            .then(function(response) {
+
+              if (!response.ok) {
+
+                throw new Error(
+                        "Payment failed"
+                );
+
+              }
+
+              return response.text();
+
+            })
+
+            .then(function(data) {
+
+              document.getElementById(
+                      "paymentContent"
+              ).innerHTML = `
+
+            <div class="success">
+
+                <div class="success-icon">
+                    ✅
+                </div>
+
+                <h2>
+                    Payment Successful!
+                </h2>
+
+                <p>
+                    Your order has been confirmed.
+                </p>
+
+                <p>
+                    Order ID:
+                    <strong>#${orderId}</strong>
+                </p>
+
+                <button
+                    onclick="window.location.href='orders.html'">
+
+                    View My Orders
+
+                </button>
+
+                <button
+                    class="secondary-button"
+                    onclick="window.location.href='menu.html'">
+
+                    Back to Menu
+
+                </button>
+
+            </div>
+
+        `;
+
+              localStorage.removeItem("orderId");
+              localStorage.removeItem("orderAmount");
+
+            })
+
+            .catch(function(error) {
+
+              console.error(error);
+
+              message.innerText =
+                      "❌ Payment failed. Please try again.";
+
+              button.disabled = false;
+
+              button.innerText =
+                      "Pay Now";
+
+            });
+
+  }
+
+
+</script>
+
+</body>
+</html>
+

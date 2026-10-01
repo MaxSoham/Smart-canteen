@@ -1,0 +1,740 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Canteen - Cart</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #222;
+        }
+
+        .navbar {
+            background: #222;
+            color: white;
+            padding: 16px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links a,
+        .nav-links button {
+            color: white;
+            text-decoration: none;
+            border: none;
+            background: transparent;
+            padding: 9px 13px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover,
+        .nav-links button:hover {
+            background: #444;
+        }
+
+        .logout {
+            background: #b00020 !important;
+        }
+
+        .hero {
+            background: #222;
+            color: white;
+            padding: 45px 6%;
+        }
+
+        .hero h1 {
+            margin: 0 0 8px;
+        }
+
+        .hero p {
+            margin: 0;
+            color: #ddd;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 30px auto;
+        }
+
+        .student-card,
+        .cart-card,
+        .empty-card {
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .student-card {
+            padding: 18px 22px;
+            margin-bottom: 20px;
+        }
+
+        .cart-card {
+            padding: 25px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 18px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .item-details {
+            color: #666;
+            margin-top: 6px;
+        }
+
+        .item-total {
+            font-weight: bold;
+            font-size: 17px;
+        }
+
+        .remove-btn {
+            margin-left: 10px;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            background: #b00020;
+            color: white;
+            cursor: pointer;
+        }
+
+        .remove-btn:hover {
+            background: #8a0019;
+        }
+
+        .summary {
+            border-top: 2px solid #eee;
+            margin-top: 15px;
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .total {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .place-btn {
+            padding: 13px 22px;
+            background: #222;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .place-btn:hover {
+            background: #444;
+        }
+
+        .place-btn:disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
+
+        .empty-card {
+            padding: 45px;
+            text-align: center;
+        }
+
+        .empty-card h2 {
+            margin-bottom: 10px;
+        }
+
+        .empty-card p {
+            color: #666;
+        }
+
+        .menu-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 11px 18px;
+            background: #222;
+            color: white;
+            text-decoration: none;
+            border-radius: 7px;
+        }
+
+        .message {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 650px) {
+
+            .navbar {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .summary {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+            }
+
+            .place-btn {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<div class="navbar">
+
+    <div class="logo">
+        🍽️ Smart Canteen
+    </div>
+
+    <div class="nav-links">
+
+        <a href="menu.html">
+            Menu
+        </a>
+
+        <a href="cart.html">
+            🛒 Cart
+        </a>
+
+        <a href="orders.html">
+            📦 Orders
+        </a>
+
+        <button class="logout"
+                onclick="logout()">
+            Logout
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <h1>
+        🛒 Your Cart
+    </h1>
+
+    <p>
+        Review your items before placing your order.
+    </p>
+
+</section>
+
+
+<!-- MAIN -->
+
+<div class="container">
+
+
+    <div class="student-card">
+
+        👤 <strong>Student ID:</strong>
+
+        <span id="studentId">
+            Loading...
+        </span>
+
+    </div>
+
+
+    <div id="cartContainer">
+
+        <div class="cart-card">
+
+            Loading cart...
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+    // ========================================
+    // LOGIN CHECK
+    // ========================================
+
+    const studentId =
+        localStorage.getItem("studentId");
+
+
+    if (!studentId) {
+
+        window.location.href =
+            "login.html";
+
+    }
+
+
+    document.getElementById(
+        "studentId"
+    ).innerText = studentId;
+
+
+    // ========================================
+    // LOAD CART
+    // ========================================
+
+    function loadCart() {
+
+        const cart =
+            JSON.parse(
+                localStorage.getItem("cart")
+            ) || [];
+
+
+        const container =
+            document.getElementById(
+                "cartContainer"
+            );
+
+
+        if (cart.length === 0) {
+
+            container.innerHTML = `
+
+            <div class="empty-card">
+
+                <h2>
+                    Your cart is empty 🛒
+                </h2>
+
+                <p>
+                    Add some delicious food from the menu.
+                </p>
+
+                <a href="menu.html"
+                   class="menu-btn">
+
+                    Browse Menu
+
+                </a>
+
+            </div>
+
+        `;
+
+            return;
+        }
+
+
+        let total = 0;
+
+
+        let html = `
+
+        <div class="cart-card">
+
+    `;
+
+
+        cart.forEach(function(item, index) {
+
+            const price =
+                Number(item.price || 0);
+
+            const quantity =
+                Number(item.quantity || 1);
+
+            const itemTotal =
+                price * quantity;
+
+
+            total += itemTotal;
+
+
+            html += `
+
+            <div class="cart-item">
+
+                <div>
+
+                    <div class="item-name">
+
+                        ${item.itemName}
+
+                    </div>
+
+                    <div class="item-details">
+
+                        ₹${price.toFixed(2)}
+                        ×
+                        ${quantity}
+
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <span class="item-total">
+
+                        ₹${itemTotal.toFixed(2)}
+
+                    </span>
+
+
+                    <button
+                        class="remove-btn"
+                        onclick="removeItem(${index})">
+
+                        Remove
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+        });
+
+
+        html += `
+
+        <div class="summary">
+
+            <div>
+
+                <div>
+                    Total Amount
+                </div>
+
+                <div class="total">
+
+                    ₹${total.toFixed(2)}
+
+                </div>
+
+            </div>
+
+
+            <button
+                id="placeButton"
+                class="place-btn"
+                onclick="placeOrder()">
+
+                Place Order →
+
+            </button>
+
+        </div>
+
+
+        <div id="message"
+             class="message">
+
+        </div>
+
+
+        </div>
+
+    `;
+
+
+        container.innerHTML =
+            html;
+
+    }
+
+
+    // ========================================
+    // REMOVE ITEM
+    // ========================================
+
+    function removeItem(index) {
+
+        let cart =
+            JSON.parse(
+                localStorage.getItem("cart")
+            ) || [];
+
+
+        cart.splice(index, 1);
+
+
+        localStorage.setItem(
+            "cart",
+            JSON.stringify(cart)
+        );
+
+
+        loadCart();
+
+    }
+
+
+    // ========================================
+    // PLACE ORDER
+    // ========================================
+
+    function placeOrder() {
+
+        const cart =
+            JSON.parse(
+                localStorage.getItem("cart")
+            ) || [];
+
+
+        if (cart.length === 0) {
+
+            return;
+
+        }
+
+
+        let total = 0;
+
+
+        cart.forEach(function(item) {
+
+            total +=
+                Number(item.price || 0) *
+                Number(item.quantity || 1);
+
+        });
+
+
+        const button =
+            document.getElementById(
+                "placeButton"
+            );
+
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+
+        button.disabled = true;
+
+        button.innerText =
+            "Placing Order...";
+
+
+        fetch("/api/order/create", {
+
+            method: "POST",
+
+            headers: {
+
+                "Content-Type":
+                    "application/json"
+
+            },
+
+            body: JSON.stringify({
+
+                studentId:
+                studentId,
+
+                totalAmount:
+                total,
+
+                items:
+                cart
+
+            })
+
+        })
+
+
+            .then(function(response) {
+
+                return response.text();
+
+            })
+
+
+            .then(function(data) {
+
+                if (
+                    data
+                        .toLowerCase()
+                        .includes(
+                            "order placed successfully"
+                        )
+                ) {
+
+                    const parts =
+                        data.split(":");
+
+
+                    const orderId =
+                        parts[
+                        parts.length - 1
+                            ].trim();
+
+
+                    localStorage.setItem(
+                        "orderId",
+                        orderId
+                    );
+
+
+                    localStorage.setItem(
+                        "orderAmount",
+                        total.toFixed(2)
+                    );
+
+
+                    localStorage.removeItem(
+                        "cart"
+                    );
+
+
+                    window.location.href =
+                        "payment.html";
+
+                } else {
+
+                    message.innerText =
+                        "❌ " + data;
+
+                    button.disabled =
+                        false;
+
+                    button.innerText =
+                        "Place Order →";
+
+                }
+
+            })
+
+
+            .catch(function(error) {
+
+                console.error(error);
+
+                message.innerText =
+                    "❌ Order placement failed!";
+
+                button.disabled =
+                    false;
+
+                button.innerText =
+                    "Place Order →";
+
+            });
+
+    }
+
+
+    // ========================================
+    // LOGOUT
+    // ========================================
+
+    function logout() {
+
+        localStorage.removeItem(
+            "studentId"
+        );
+
+        localStorage.removeItem(
+            "cart"
+        );
+
+        localStorage.removeItem(
+            "orderId"
+        );
+
+        localStorage.removeItem(
+            "orderAmount"
+        );
+
+
+        window.location.href =
+            "login.html";
+
+    }
+
+
+    // ========================================
+    // START
+    // ========================================
+
+    loadCart();
+
+
+</script>
+
+</body>
+
+</html>
+

@@ -1,0 +1,584 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Canteen - Student Registration</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+
+            min-height: 100vh;
+
+            background:
+                    linear-gradient(
+                            135deg,
+                            #fff7ed,
+                            #fef3c7
+                    );
+
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            background: #111827;
+
+            color: white;
+
+            padding: 18px 7%;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .home-link {
+            color: white;
+
+            text-decoration: none;
+
+            padding: 9px 16px;
+
+            border-radius: 7px;
+
+            background: #374151;
+        }
+
+        .home-link:hover {
+            background: #4b5563;
+        }
+
+        /* MAIN */
+
+        .main {
+            flex: 1;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 45px 20px;
+        }
+
+        .register-box {
+            width: 100%;
+            max-width: 600px;
+
+            background: white;
+
+            padding: 40px;
+
+            border-radius: 18px;
+
+            box-shadow:
+                    0 15px 40px rgba(0,0,0,0.12);
+        }
+
+        .heading {
+            text-align: center;
+
+            margin-bottom: 30px;
+        }
+
+        .heading-icon {
+            font-size: 45px;
+
+            margin-bottom: 10px;
+        }
+
+        .heading h1 {
+            font-size: 32px;
+
+            margin-bottom: 10px;
+        }
+
+        .heading p {
+            color: #666;
+
+            line-height: 1.5;
+        }
+
+        /* FORM */
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+
+            font-weight: bold;
+
+            font-size: 14px;
+
+            margin-bottom: 7px;
+        }
+
+        input {
+            width: 100%;
+
+            padding: 13px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 7px;
+
+            font-size: 15px;
+
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #f59e0b;
+
+            box-shadow:
+                    0 0 0 3px
+                    rgba(245,158,11,0.15);
+        }
+
+        .register-btn {
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 7px;
+
+            background: #f59e0b;
+
+            color: #111827;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            margin-top: 8px;
+
+            transition: 0.3s;
+        }
+
+        .register-btn:hover {
+            background: #d97706;
+
+            transform: translateY(-1px);
+        }
+
+        .register-btn:disabled {
+            background: #9ca3af;
+
+            cursor: not-allowed;
+        }
+
+        /* MESSAGE */
+
+        #message {
+            text-align: center;
+
+            margin-top: 18px;
+
+            min-height: 20px;
+
+            font-weight: bold;
+        }
+
+        /* LOGIN LINK */
+
+        .login-link {
+            text-align: center;
+
+            margin-top: 25px;
+
+            padding-top: 22px;
+
+            border-top: 1px solid #eee;
+
+            color: #555;
+        }
+
+        .login-link a {
+            color: #d97706;
+
+            font-weight: bold;
+
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: #0b1120;
+
+            color: #d1d5db;
+
+            text-align: center;
+
+            padding: 20px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                padding: 16px 5%;
+            }
+
+            .register-box {
+                padding: 25px;
+            }
+
+            .heading h1 {
+                font-size: 27px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        🍴 Smart Canteen
+    </div>
+
+    <a href="index.html"
+       class="home-link">
+
+        🏠 Home
+
+    </a>
+
+</nav>
+
+
+<!-- MAIN -->
+
+<main class="main">
+
+    <div class="register-box">
+
+
+        <div class="heading">
+
+            <div class="heading-icon">
+                🎓
+            </div>
+
+            <h1>
+                Create Student Account
+            </h1>
+
+            <p>
+                Register to order food from
+                the Smart Canteen.
+            </p>
+
+        </div>
+
+
+        <form id="registerForm">
+
+
+            <div class="form-group">
+
+                <label for="name">
+                    Full Name
+                </label>
+
+                <input
+                        type="text"
+                        id="name"
+                        placeholder="Enter your full name"
+                        required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email Address
+                </label>
+
+                <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter your email"
+                        required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="phone">
+                    Phone Number
+                </label>
+
+                <input
+                        type="tel"
+                        id="phone"
+                        placeholder="Enter your phone number"
+                        required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                        type="password"
+                        id="password"
+                        placeholder="Create a password"
+                        required
+                >
+
+            </div>
+
+
+            <button
+                    type="submit"
+                    class="register-btn"
+                    id="registerButton">
+
+                📝 Create Account
+
+            </button>
+
+
+        </form>
+
+
+        <div id="message"></div>
+
+
+        <div class="login-link">
+
+            Already have an account?
+
+            <a href="login.html">
+                Login here
+            </a>
+
+        </div>
+
+
+    </div>
+
+</main>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    © 2026 Smart Canteen |
+    Smart College Canteen Pre-Order System
+
+</footer>
+
+
+<script>
+
+
+    document.getElementById(
+        "registerForm"
+    ).addEventListener(
+        "submit",
+        function(event) {
+
+
+            event.preventDefault();
+
+
+            const name =
+                document.getElementById(
+                    "name"
+                ).value.trim();
+
+
+            const email =
+                document.getElementById(
+                    "email"
+                ).value.trim();
+
+
+            const phone =
+                document.getElementById(
+                    "phone"
+                ).value.trim();
+
+
+            const password =
+                document.getElementById(
+                    "password"
+                ).value;
+
+
+            const message =
+                document.getElementById(
+                    "message"
+                );
+
+
+            const button =
+                document.getElementById(
+                    "registerButton"
+                );
+
+
+            message.innerText = "";
+
+
+            button.disabled = true;
+
+            button.innerText =
+                "Creating Account...";
+
+
+            fetch("/api/student/register", {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type":
+                        "application/json"
+
+                },
+
+                body: JSON.stringify({
+
+                    name: name,
+
+                    email: email,
+
+                    phone: phone,
+
+                    password: password
+
+                })
+
+            })
+
+
+                .then(function(response) {
+
+                    return response.text();
+
+                })
+
+
+                .then(function(data) {
+
+
+                    message.innerText =
+                        data;
+
+
+                    if (
+                        data.toLowerCase()
+                            .includes("success")
+                    ) {
+
+
+                        button.innerText =
+                            "✅ Account Created";
+
+
+                        setTimeout(
+                            function() {
+
+                                window.location.href =
+                                    "login.html";
+
+                            },
+                            1500
+                        );
+
+
+                    } else {
+
+
+                        button.disabled = false;
+
+                        button.innerText =
+                            "📝 Create Account";
+
+                    }
+
+                })
+
+
+                .catch(function(error) {
+
+
+                    console.error(error);
+
+
+                    message.innerText =
+                        "❌ Unable to connect to server.";
+
+
+                    button.disabled = false;
+
+                    button.innerText =
+                        "📝 Create Account";
+
+                });
+
+        }
+    );
+
+
+</script>
+
+
+</body>
+
+</html>
+

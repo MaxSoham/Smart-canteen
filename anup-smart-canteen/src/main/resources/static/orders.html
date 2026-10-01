@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Canteen - My Orders</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #222;
+        }
+
+        .navbar {
+            background: #111827;
+            color: white;
+            padding: 16px 6%;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .logout {
+            background: #dc2626;
+            padding: 8px 14px;
+            border-radius: 6px;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 45px auto;
+        }
+
+        .header {
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            margin-bottom: 8px;
+            font-size: 32px;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        .student-box {
+            background: white;
+            padding: 18px 22px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.06);
+        }
+
+        .student-box strong {
+            color: #111827;
+        }
+
+        #orders {
+            display: grid;
+            gap: 20px;
+        }
+
+        .order-card {
+            background: white;
+            padding: 24px;
+            border-radius: 14px;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.07);
+        }
+
+        .order-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .order-id {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .status {
+            padding: 7px 13px;
+            border-radius: 20px;
+            background: #fef3c7;
+            color: #92400e;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        .info {
+            background: #f8fafc;
+            padding: 14px;
+            border-radius: 8px;
+        }
+
+        .label {
+            display: block;
+            font-size: 12px;
+            color: #777;
+            margin-bottom: 5px;
+        }
+
+        .value {
+            font-weight: bold;
+        }
+
+        .amount {
+            font-size: 20px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .menu-btn {
+            background: #111827;
+            color: white;
+        }
+
+        .refresh-btn {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .empty,
+        .error,
+        .loading {
+            background: white;
+            padding: 45px;
+            text-align: center;
+            border-radius: 14px;
+            color: #666;
+        }
+
+        .empty-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 650px) {
+
+            .navbar {
+                padding: 15px 5%;
+            }
+
+            .nav-links a:not(.logout) {
+                display: none;
+            }
+
+            .container {
+                margin: 30px auto;
+            }
+
+            .header h1 {
+                font-size: 26px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .order-top {
+                align-items: flex-start;
+                gap: 10px;
+                flex-direction: column;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        🍴 Smart Canteen
+    </div>
+
+    <div class="nav-links">
+
+        <a href="menu.html">
+            Menu
+        </a>
+
+        <a href="cart.html">
+            Cart
+        </a>
+
+        <a href="orders.html">
+            My Orders
+        </a>
+
+        <a href="#"
+           class="logout"
+           onclick="logout()">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>
+            📦 My Orders
+        </h1>
+
+        <p>
+            Track your Smart Canteen orders and payment status.
+        </p>
+
+    </div>
+
+
+    <div class="student-box">
+
+        👤 Student ID:
+
+        <strong id="studentId">
+            Loading...
+        </strong>
+
+    </div>
+
+
+    <div id="orders"
+         class="loading">
+
+        Loading your orders...
+
+    </div>
+
+
+    <div class="actions">
+
+        <button
+                class="menu-btn"
+                onclick="window.location.href='menu.html'">
+
+            ← Back to Menu
+
+        </button>
+
+        <button
+                class="refresh-btn"
+                onclick="loadOrders()">
+
+            🔄 Refresh Orders
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    const studentId =
+        localStorage.getItem("studentId");
+
+
+    if (!studentId) {
+
+        window.location.href =
+            "login.html";
+
+    }
+
+
+    document.getElementById(
+        "studentId"
+    ).innerText = studentId;
+
+
+    function loadOrders() {
+
+        const ordersDiv =
+            document.getElementById("orders");
+
+
+        ordersDiv.className =
+            "loading";
+
+        ordersDiv.innerHTML =
+            "Loading your orders...";
+
+
+        fetch(
+            "/api/orders/" +
+            encodeURIComponent(studentId)
+        )
+
+            .then(function(response) {
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Unable to load orders"
+                    );
+
+                }
+
+                return response.json();
+
+            })
+
+            .then(function(orders) {
+
+                ordersDiv.className = "";
+
+
+                if (!orders ||
+                    orders.length === 0) {
+
+                    ordersDiv.innerHTML = `
+
+                <div class="empty">
+
+                    <div class="empty-icon">
+                        🛒
+                    </div>
+
+                    <h2>
+                        No Orders Yet
+                    </h2>
+
+                    <p>
+                        Your placed orders will appear here.
+                    </p>
+
+                    <button
+                        class="menu-btn"
+                        onclick="window.location.href='menu.html'">
+
+                        Browse Menu
+
+                    </button>
+
+                </div>
+
+            `;
+
+                    return;
+
+                }
+
+
+                ordersDiv.innerHTML = "";
+
+
+                orders.forEach(function(order) {
+
+                    let statusClass =
+                        "status";
+
+
+                    ordersDiv.innerHTML += `
+
+                <div class="order-card">
+
+                    <div class="order-top">
+
+                        <div class="order-id">
+
+                            Order #${order.orderId}
+
+                        </div>
+
+                        <div class="${statusClass}">
+
+                            ${order.orderStatus || "Pending"}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-grid">
+
+                        <div class="info">
+
+                            <span class="label">
+                                Order Date
+                            </span>
+
+                            <span class="value">
+
+                                ${order.orderDate || "-"}
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="info">
+
+                            <span class="label">
+                                Order Status
+                            </span>
+
+                            <span class="value">
+
+                                ${order.orderStatus || "Pending"}
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="info">
+
+                            <span class="label">
+                                Payment Method
+                            </span>
+
+                            <span class="value">
+
+                                ${order.paymentMethod || "Not Paid"}
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="info">
+
+                            <span class="label">
+                                Payment Status
+                            </span>
+
+                            <span class="value">
+
+                                ${order.paymentStatus || "Not Paid"}
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="info">
+
+                            <span class="label">
+                                Total Amount
+                            </span>
+
+                            <span class="value amount">
+
+                                ₹${Number(
+                        order.totalAmount || 0
+                    ).toFixed(2)}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `;
+
+                });
+
+            })
+
+            .catch(function(error) {
+
+                console.error(error);
+
+                ordersDiv.className =
+                    "error";
+
+                ordersDiv.innerHTML = `
+
+            <h2>
+                ⚠️ Unable to Load Orders
+            </h2>
+
+            <p>
+                Please check your connection and try again.
+            </p>
+
+            <button
+                class="refresh-btn"
+                onclick="loadOrders()">
+
+                Try Again
+
+            </button>
+
+        `;
+
+            });
+
+    }
+
+
+    function logout() {
+
+        localStorage.removeItem(
+            "studentId"
+        );
+
+        localStorage.removeItem(
+            "cart"
+        );
+
+        localStorage.removeItem(
+            "orderId"
+        );
+
+        localStorage.removeItem(
+            "orderAmount"
+        );
+
+        window.location.href =
+            "login.html";
+
+    }
+
+
+    loadOrders();
+
+</script>
+
+</body>
+
+</html>
+

@@ -1,0 +1,708 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Canteen - Menu</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #222;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            background: #222;
+            color: white;
+            padding: 16px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links a,
+        .nav-links button {
+            color: white;
+            text-decoration: none;
+            border: none;
+            background: transparent;
+            padding: 9px 13px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover,
+        .nav-links button:hover {
+            background: #444;
+        }
+
+        .logout {
+            background: #b00020 !important;
+        }
+
+        /* HERO */
+
+        .hero {
+            background: #222;
+            color: white;
+            padding: 55px 6%;
+        }
+
+        .hero h1 {
+            margin: 0 0 10px;
+            font-size: 38px;
+        }
+
+        .hero p {
+            margin: 0;
+            color: #ddd;
+            font-size: 17px;
+        }
+
+        /* CONTAINER */
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        /* STUDENT INFO */
+
+        .student-card {
+            background: white;
+            padding: 18px 22px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+        }
+
+        .student-card strong {
+            margin-right: 8px;
+        }
+
+        /* SEARCH */
+
+        .search-box {
+            margin-bottom: 25px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ccc;
+            border-radius: 9px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .search-box input:focus {
+            border-color: #222;
+        }
+
+        /* MENU */
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .food-card {
+            background: white;
+            padding: 22px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: 0.2s;
+        }
+
+        .food-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0,0,0,0.12);
+        }
+
+        .food-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .food-card h3 {
+            margin: 0 0 8px;
+            font-size: 20px;
+        }
+
+        .description {
+            color: #666;
+            min-height: 42px;
+            line-height: 1.4;
+        }
+
+        .price {
+            font-size: 21px;
+            font-weight: bold;
+            margin: 16px 0;
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #222;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .add-btn:hover {
+            background: #444;
+        }
+
+        .loading,
+        .empty {
+            background: white;
+            padding: 35px;
+            text-align: center;
+            border-radius: 12px;
+            color: #666;
+            grid-column: 1 / -1;
+        }
+
+        /* TOAST */
+
+        .toast {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            background: #222;
+            color: white;
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: none;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 850px) {
+
+            .menu-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 30px;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<div class="navbar">
+
+    <div class="logo">
+        🍽️ Smart Canteen
+    </div>
+
+    <div class="nav-links">
+
+        <a href="menu.html">
+            Menu
+        </a>
+
+        <a href="cart.html">
+            🛒 Cart
+        </a>
+
+        <a href="orders.html">
+            📦 Orders
+        </a>
+
+        <button class="logout"
+                onclick="logout()">
+            Logout
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <h1>
+        Today's Menu 🍴
+    </h1>
+
+    <p>
+        Choose your favourite food and pre-order it easily.
+    </p>
+
+</section>
+
+
+<!-- MAIN -->
+
+<div class="container">
+
+
+    <!-- STUDENT -->
+
+    <div class="student-card">
+
+        👤
+
+        <strong>
+            Student ID:
+        </strong>
+
+        <span id="studentId">
+            Loading...
+        </span>
+
+    </div>
+
+
+    <!-- SEARCH -->
+
+    <div class="search-box">
+
+        <input
+                type="text"
+                id="search"
+                placeholder="🔍 Search food items..."
+                oninput="filterFood()">
+
+    </div>
+
+
+    <!-- MENU -->
+
+    <div id="menu"
+         class="menu-grid">
+
+        <div class="loading">
+            Loading menu...
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<!-- TOAST -->
+
+<div id="toast"
+     class="toast">
+
+    Added to cart!
+
+</div>
+
+
+<script>
+
+
+    // ========================================
+    // LOGIN CHECK
+    // ========================================
+
+    const studentId =
+        localStorage.getItem("studentId");
+
+
+    if (!studentId) {
+
+        window.location.href =
+            "login.html";
+
+    }
+
+
+    document.getElementById(
+        "studentId"
+    ).innerText = studentId;
+
+
+    // ========================================
+    // FOOD DATA
+    // ========================================
+
+    let allFood = [];
+
+
+    // ========================================
+    // LOAD FOOD
+    // ========================================
+
+    function loadFood() {
+
+        fetch("/api/food")
+
+            .then(function(response) {
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Unable to load menu"
+                    );
+
+                }
+
+                return response.json();
+
+            })
+
+            .then(function(foodItems) {
+
+                allFood = foodItems;
+
+                displayFood(foodItems);
+
+            })
+
+            .catch(function(error) {
+
+                console.error(error);
+
+                document.getElementById(
+                    "menu"
+                ).innerHTML = `
+
+                <div class="empty">
+
+                    ❌ Unable to load menu.
+
+                </div>
+
+            `;
+
+            });
+
+    }
+
+
+    // ========================================
+    // DISPLAY FOOD
+    // ========================================
+
+    function displayFood(foodItems) {
+
+        const menu =
+            document.getElementById("menu");
+
+
+        menu.innerHTML = "";
+
+
+        if (foodItems.length === 0) {
+
+            menu.innerHTML = `
+
+            <div class="empty">
+
+                No food items available.
+
+            </div>
+
+        `;
+
+            return;
+        }
+
+
+        foodItems.forEach(function(food) {
+
+            const name =
+                food.itemName || "Food Item";
+
+
+            const description =
+                food.description ||
+                "Fresh and delicious.";
+
+
+            const price =
+                Number(food.price || 0);
+
+
+            menu.innerHTML += `
+
+            <div class="food-card">
+
+                <div class="food-icon">
+                    🍴
+                </div>
+
+                <h3>
+                    ${name}
+                </h3>
+
+                <div class="description">
+                    ${description}
+                </div>
+
+                <div class="price">
+                    ₹${price.toFixed(2)}
+                </div>
+
+                <button
+                    class="add-btn"
+                    onclick="addToCart(
+                        ${food.foodItemId},
+                        '${escapeQuotes(name)}',
+                        ${price}
+                    )">
+
+                    + Add to Cart
+
+                </button>
+
+            </div>
+
+        `;
+
+        });
+
+    }
+
+
+    // ========================================
+    // SEARCH
+    // ========================================
+
+    function filterFood() {
+
+        const search =
+            document.getElementById(
+                "search"
+            ).value.toLowerCase().trim();
+
+
+        const filtered =
+            allFood.filter(function(food) {
+
+                const name =
+                    (food.itemName || "")
+                        .toLowerCase();
+
+
+                const description =
+                    (food.description || "")
+                        .toLowerCase();
+
+
+                return (
+                    name.includes(search) ||
+                    description.includes(search)
+                );
+
+            });
+
+
+        displayFood(filtered);
+
+    }
+
+
+    // ========================================
+    // ADD TO CART
+    // ========================================
+
+    function addToCart(
+        foodItemId,
+        itemName,
+        price
+    ) {
+
+        let cart =
+            JSON.parse(
+                localStorage.getItem("cart")
+            ) || [];
+
+
+        const existing =
+            cart.find(function(item) {
+
+                return item.foodItemId === foodItemId;
+
+            });
+
+
+        if (existing) {
+
+            existing.quantity += 1;
+
+        } else {
+
+            cart.push({
+
+                foodItemId:
+                foodItemId,
+
+                itemName:
+                itemName,
+
+                price:
+                price,
+
+                quantity:
+                    1
+
+            });
+
+        }
+
+
+        localStorage.setItem(
+            "cart",
+            JSON.stringify(cart)
+        );
+
+
+        showToast(
+            itemName + " added to cart!"
+        );
+
+    }
+
+
+    // ========================================
+    // ESCAPE QUOTES
+    // ========================================
+
+    function escapeQuotes(value) {
+
+        return value
+            .replace(/\\/g, "\\\\")
+            .replace(/'/g, "\\'");
+    }
+
+
+    // ========================================
+    // TOAST
+    // ========================================
+
+    function showToast(message) {
+
+        const toast =
+            document.getElementById("toast");
+
+
+        toast.innerText =
+            "✅ " + message;
+
+
+        toast.style.display =
+            "block";
+
+
+        setTimeout(function() {
+
+            toast.style.display =
+                "none";
+
+        }, 1800);
+
+    }
+
+
+    // ========================================
+    // LOGOUT
+    // ========================================
+
+    function logout() {
+
+        localStorage.removeItem(
+            "studentId"
+        );
+
+        localStorage.removeItem(
+            "cart"
+        );
+
+        localStorage.removeItem(
+            "orderId"
+        );
+
+        localStorage.removeItem(
+            "orderAmount"
+        );
+
+
+        window.location.href =
+            "login.html";
+
+    }
+
+
+    // ========================================
+    // START
+    // ========================================
+
+    loadFood();
+
+
+</script>
+
+</body>
+
+</html>
+
