@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Canteen</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f6f7fb;
+            color: #222;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            background: #222;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .login-btn {
+            background: white;
+            color: #222;
+            text-decoration: none;
+            padding: 10px 22px;
+            border-radius: 7px;
+            font-weight: bold;
+        }
+
+        .login-btn:hover {
+            background: #eee;
+        }
+
+        /* HERO */
+
+        .hero {
+            min-height: 70vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .hero-content {
+            max-width: 750px;
+        }
+
+        .hero h1 {
+            font-size: 52px;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 span {
+            color: #555;
+        }
+
+        .hero p {
+            color: #666;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .get-started {
+            display: inline-block;
+            background: #222;
+            color: white;
+            text-decoration: none;
+            padding: 14px 30px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .get-started:hover {
+            background: #444;
+        }
+
+        /* FEATURES */
+
+        .features {
+            padding: 50px 7%;
+            background: white;
+        }
+
+        .features h2 {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .feature-container {
+            display: grid;
+            grid-template-columns:
+                repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .feature-card {
+            padding: 25px;
+            text-align: center;
+            border: 1px solid #eee;
+            border-radius: 12px;
+        }
+
+        .feature-card .icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            color: #777;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: #222;
+            color: #bbb;
+            text-align: center;
+            padding: 25px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 800px) {
+
+            .feature-container {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .hero h1 {
+                font-size: 38px;
+            }
+
+        }
+
+        @media (max-width: 500px) {
+
+            .feature-container {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        🍽️ Smart Canteen
+    </div>
+
+    <a
+            href="login.html"
+            class="login-btn">
+
+        Login
+
+    </a>
+
+</nav>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <h1>
+
+            Your Campus Food,
+            <span>Made Smarter.</span>
+
+        </h1>
+
+        <p>
+
+            Order your favourite canteen food
+            in advance, save time and enjoy
+            a smarter campus dining experience.
+
+        </p>
+
+        <a
+                href="login.html"
+                class="get-started">
+
+            Get Started →
+
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- FEATURES -->
+
+<section class="features">
+
+    <h2>
+        Why Smart Canteen?
+    </h2>
+
+    <div class="feature-container">
+
+
+        <div class="feature-card">
+
+            <div class="icon">
+                ⚡
+            </div>
+
+            <h3>
+                Easy Ordering
+            </h3>
+
+            <p>
+                Order food quickly from
+                your campus canteen.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="icon">
+                ⏱️
+            </div>
+
+            <h3>
+                Save Time
+            </h3>
+
+            <p>
+                Pre-order your food and
+                avoid long queues.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="icon">
+                🛒
+            </div>
+
+            <h3>
+                Smart Cart
+            </h3>
+
+            <p>
+                Easily manage food items
+                before placing your order.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="icon">
+                💳
+            </div>
+
+            <h3>
+                Easy Payment
+            </h3>
+
+            <p>
+                Choose your preferred
+                payment method.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    © 2026 Smart Canteen | Smart Campus Food Ordering
+
+</footer>
+
+
+</body>
+
+</html>
+

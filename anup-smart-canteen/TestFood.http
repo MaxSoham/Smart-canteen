@@ -1,0 +1,10 @@
+POST http://localhost:8080/api/admin/food/add
+Content-Type: application/json
+
+{
+  "categoryId": 1,
+  "foodName": "Masala Dosa",
+  "description": "Crispy dosa served with chutney",
+  "price": 60,
+  "availability": true
+}

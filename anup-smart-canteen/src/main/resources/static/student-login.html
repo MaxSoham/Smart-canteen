@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Smart Canteen - Student Login</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            min-height: 100vh;
+        }
+
+        .login-box {
+            background: white;
+            width: 350px;
+            padding: 30px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                    0 5px 20px rgba(0,0,0,0.2);
+
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 25px;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+
+            padding: 12px;
+            margin: 10px 0;
+
+            border: 1px solid #ccc;
+            border-radius: 6px;
+
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+
+            padding: 12px;
+            margin-top: 15px;
+
+            background: #222;
+            color: white;
+
+            border: none;
+            border-radius: 6px;
+
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #444;
+        }
+
+        .register-btn {
+            background: #555;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="login-box">
+
+    <h1>🍽️ Student Login</h1>
+
+    <form onsubmit="loginStudent(event)">
+
+        <input
+                type="email"
+                id="email"
+                placeholder="Enter Email"
+                required
+        >
+
+        <input
+                type="password"
+                id="password"
+                placeholder="Enter Password"
+                required
+        >
+
+        <button type="submit">
+
+            Login
+
+        </button>
+
+    </form>
+
+    <button
+            class="register-btn"
+            onclick="window.location.href='student-register.html'">
+
+        Create Account
+
+    </button>
+
+    <div id="message"></div>
+
+</div>
+
+
+<script>
+
+    function loginStudent(event) {
+
+        event.preventDefault();
+
+        const email =
+            document.getElementById("email").value;
+
+        const password =
+            document.getElementById("password").value;
+
+
+        const loginData = {
+
+            email: email,
+
+            password: password
+
+        };
+
+
+        fetch("/api/student/login", {
+
+            method: "POST",
+
+            headers: {
+
+                "Content-Type":
+                    "application/json"
+
+            },
+
+            body:
+                JSON.stringify(loginData)
+
+        })
+
+            .then(function(response) {
+
+                return response.text();
+
+            })
+
+            .then(function(data) {
+
+                data = data.trim();
+
+
+                if (data.startsWith("STU")) {
+
+                    localStorage.setItem(
+                        "studentId",
+                        data
+                    );
+
+                    window.location.href =
+                        "menu.html";
+
+                } else {
+
+                    document.getElementById(
+                        "message"
+                    ).innerText = data;
+
+                }
+
+            })
+
+            .catch(function(error) {
+
+                console.error(error);
+
+                document.getElementById(
+                    "message"
+                ).innerText =
+                    "Server connection failed!";
+
+            });
+
+    }
+
+</script>
+
+</body>
+
+</html>
+

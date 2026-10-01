@@ -1,0 +1,437 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Canteen - Admin Login</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f6f7fb;
+            color: #222;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background: #222;
+            color: white;
+            padding: 16px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.7;
+        }
+
+        .main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 20px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 430px;
+            background: white;
+            padding: 35px;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .admin-icon {
+            width: 75px;
+            height: 75px;
+            margin: 0 auto 20px;
+            background: #222;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+        }
+
+        .login-card h1 {
+            text-align: center;
+            margin: 0 0 8px;
+            font-size: 27px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #222;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 13px;
+            margin-top: 8px;
+            background: #222;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .login-btn:hover {
+            background: #444;
+        }
+
+        .login-btn:disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
+
+        .message {
+            display: none;
+            margin-top: 18px;
+            padding: 12px;
+            border-radius: 7px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 22px;
+            color: #555;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            color: #222;
+            text-decoration: underline;
+        }
+
+        footer {
+            background: #222;
+            color: #bbb;
+            text-align: center;
+            padding: 22px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .logo {
+                font-size: 19px;
+            }
+
+            .nav-links {
+                gap: 12px;
+            }
+
+            .nav-links a {
+                font-size: 13px;
+            }
+
+            .login-card {
+                padding: 28px 22px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        🍽️ Smart Canteen
+    </div>
+
+    <div class="nav-links">
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="login.html">
+            Student Login
+        </a>
+
+    </div>
+
+</nav>
+
+<main class="main">
+
+    <div class="login-card">
+
+        <div class="admin-icon">
+            👨‍💼
+        </div>
+
+        <h1>
+            Admin Login
+        </h1>
+
+        <p class="subtitle">
+            Sign in to manage the Smart Canteen
+        </p>
+
+        <form onsubmit="adminLogin(event)">
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email
+                </label>
+
+                <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter admin email"
+                        required>
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter admin password"
+                        required>
+
+            </div>
+
+            <button
+                    type="submit"
+                    id="loginButton"
+                    class="login-btn">
+
+                Login as Admin
+
+            </button>
+
+        </form>
+
+        <div
+                id="message"
+                class="message">
+        </div>
+
+        <a
+                href="login.html"
+                class="back-link">
+
+            ← Back to Login
+
+        </a>
+
+    </div>
+
+</main>
+
+<footer>
+
+    © 2026 Smart Canteen | Admin Portal
+
+</footer>
+
+<script>
+
+    function adminLogin(event) {
+
+        event.preventDefault();
+
+        const email =
+            document.getElementById("email").value.trim();
+
+        const password =
+            document.getElementById("password").value;
+
+        const button =
+            document.getElementById("loginButton");
+
+        const message =
+            document.getElementById("message");
+
+        button.disabled = true;
+
+        button.innerText =
+            "Signing in...";
+
+        fetch("/api/admin/login", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+
+                email: email,
+                password: password
+
+            })
+
+        })
+
+            .then(function(response) {
+
+                return response.text()
+                    .then(function(data) {
+
+                        if (!response.ok) {
+
+                            throw new Error(
+                                data ||
+                                "Invalid admin credentials"
+                            );
+
+                        }
+
+                        return data;
+
+                    });
+
+            })
+
+            .then(function(data) {
+
+                console.log(data);
+
+                if (data.trim() === "SUCCESS") {
+
+                    message.style.display =
+                        "block";
+
+                    message.style.background =
+                        "#e8f5e9";
+
+                    message.style.color =
+                        "#2e7d32";
+
+                    message.innerText =
+                        "✓ Login successful. Opening dashboard...";
+
+                    setTimeout(function() {
+
+                        window.location.href =
+                            "admin-dashboard.html";
+
+                    }, 700);
+
+                } else {
+
+                    throw new Error(
+                        "Invalid Email or Password!"
+                    );
+
+                }
+
+            })
+
+            .catch(function(error) {
+
+                console.error(error);
+
+                message.style.display =
+                    "block";
+
+                message.style.background =
+                    "#ffebee";
+
+                message.style.color =
+                    "#c62828";
+
+                message.innerText =
+                    error.message ||
+                    "Invalid email or password";
+
+                button.disabled = false;
+
+                button.innerText =
+                    "Login as Admin";
+
+            });
+
+    }
+
+</script>
+
+</body>
+
+</html>
+

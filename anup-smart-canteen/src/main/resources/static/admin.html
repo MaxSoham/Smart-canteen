@@ -1,0 +1,570 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Canteen - Admin Dashboard</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f4f6f8;
+        }
+
+        .header {
+            background: #343a40;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .dashboard-title {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .table-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #ccc;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #007bff;
+            color: white;
+            padding: 12px;
+            text-align: center;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        tr:hover {
+            background: #f1f1f1;
+        }
+
+        select {
+            padding: 7px;
+            border-radius: 5px;
+            border: 1px solid #aaa;
+        }
+
+        .update-btn {
+            margin-top: 5px;
+            padding: 7px 12px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .update-btn:hover {
+            background: #218838;
+        }
+
+        .status {
+            font-weight: bold;
+        }
+
+        .pending {
+            color: #ff9800;
+        }
+
+        .preparing {
+            color: #007bff;
+        }
+
+        .ready {
+            color: #28a745;
+        }
+
+        .completed {
+            color: #198754;
+        }
+
+        .cancelled {
+            color: #dc3545;
+        }
+
+        .paid {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .not-paid {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            font-size: 18px;
+            padding: 20px;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .message {
+            text-align: center;
+            margin: 15px;
+            font-weight: bold;
+        }
+
+        .refresh-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 25px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .refresh-btn:hover {
+            background: #0056b3;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- HEADER -->
+
+<div class="header">
+
+    <h1>Smart Canteen Admin Dashboard</h1>
+
+</div>
+
+
+
+<div class="container">
+
+
+    <h2 class="dashboard-title">
+        All Orders
+    </h2>
+
+
+    <button
+            class="refresh-btn"
+            onclick="loadOrders()">
+
+        🔄 Refresh Orders
+
+    </button>
+
+
+    <div id="message"
+         class="message">
+    </div>
+
+
+    <div class="table-container">
+
+
+        <div id="loading"
+             class="loading">
+
+            Loading orders...
+
+        </div>
+
+
+        <table id="ordersTable"
+               style="display:none;">
+
+            <thead>
+
+            <tr>
+
+                <th>Order ID</th>
+
+                <th>Student ID</th>
+
+                <th>Date</th>
+
+                <th>Amount</th>
+
+                <th>Order Status</th>
+
+                <th>Payment Method</th>
+
+                <th>Payment Status</th>
+
+                <th>Update Status</th>
+
+            </tr>
+
+            </thead>
+
+
+            <tbody id="ordersBody">
+
+            </tbody>
+
+        </table>
+
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+
+    /* =========================
+       LOAD ORDERS
+    ========================= */
+
+    function loadOrders() {
+
+
+        document.getElementById("loading")
+            .style.display = "block";
+
+
+        document.getElementById("ordersTable")
+            .style.display = "none";
+
+
+        fetch("/api/admin/orders")
+
+
+            .then(function(response) {
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Unable to load orders"
+                    );
+
+                }
+
+                return response.json();
+
+            })
+
+
+            .then(function(orders) {
+
+
+                const tbody =
+                    document.getElementById(
+                        "ordersBody"
+                    );
+
+
+                tbody.innerHTML = "";
+
+
+                /*
+                   REMOVE DUPLICATE ORDER IDs
+                */
+
+                const uniqueOrders = [];
+
+                const orderIds = new Set();
+
+
+                orders.forEach(function(order) {
+
+                    if (!orderIds.has(order.orderId)) {
+
+                        orderIds.add(order.orderId);
+
+                        uniqueOrders.push(order);
+
+                    }
+
+                });
+
+
+                if (uniqueOrders.length === 0) {
+
+                    document.getElementById(
+                        "loading"
+                    ).innerText =
+                        "No orders found.";
+
+                    return;
+
+                }
+
+
+                /*
+                   DISPLAY ORDERS
+                */
+
+                uniqueOrders.forEach(function(order) {
+
+
+                    let paymentMethod =
+                        order.paymentMethod ||
+                        "Not Paid";
+
+
+                    let paymentStatus =
+                        order.paymentStatus ||
+                        "Not Paid";
+
+
+                    let paymentClass =
+                        order.paymentStatus === "Paid"
+                            ? "paid"
+                            : "not-paid";
+
+
+                    let currentStatus =
+                        order.orderStatus;
+
+
+                    tbody.innerHTML += `
+
+                    <tr>
+
+                        <td>
+                            ${order.orderId}
+                        </td>
+
+                        <td>
+                            ${order.customerId}
+                        </td>
+
+                        <td>
+                            ${order.orderDate}
+                        </td>
+
+                        <td>
+                            ₹${order.totalAmount}
+                        </td>
+
+                        <td>
+
+                            <span
+                                class="status">
+
+                                ${currentStatus}
+
+                            </span>
+
+                        </td>
+
+                        <td>
+                            ${paymentMethod}
+                        </td>
+
+                        <td>
+
+                            <span
+                                class="${paymentClass}">
+
+                                ${paymentStatus}
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <select
+                                id="status-${order.orderId}">
+
+                                <option value="Pending"
+                                    ${currentStatus === "Pending" ? "selected" : ""}>
+                                    Pending
+                                </option>
+
+                                <option value="Preparing"
+                                    ${currentStatus === "Preparing" ? "selected" : ""}>
+                                    Preparing
+                                </option>
+
+                                <option value="Ready"
+                                    ${currentStatus === "Ready" ? "selected" : ""}>
+                                    Ready
+                                </option>
+
+                                <option value="Completed"
+                                    ${currentStatus === "Completed" ? "selected" : ""}>
+                                    Completed
+                                </option>
+
+                                <option value="Cancelled"
+                                    ${currentStatus === "Cancelled" ? "selected" : ""}>
+                                    Cancelled
+                                </option>
+
+                            </select>
+
+
+                            <br>
+
+
+                            <button
+                                class="update-btn"
+                                onclick="updateStatus(${order.orderId})">
+
+                                Update
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+                });
+
+
+                document.getElementById(
+                    "loading"
+                ).style.display = "none";
+
+
+                document.getElementById(
+                    "ordersTable"
+                ).style.display = "table";
+
+            })
+
+
+            .catch(function(error) {
+
+                console.error(error);
+
+                document.getElementById(
+                    "loading"
+                ).innerHTML =
+
+                    '<div class="error">' +
+                    'Unable to load orders.' +
+                    '</div>';
+
+            });
+
+    }
+
+
+
+    /* =========================
+       UPDATE STATUS
+    ========================= */
+
+    function updateStatus(orderId) {
+
+
+        const status =
+            document.getElementById(
+                "status-" + orderId
+            ).value;
+
+
+        fetch(
+            "/api/admin/orders/" +
+            orderId +
+            "/status?status=" +
+            encodeURIComponent(status),
+
+            {
+                method: "PUT"
+            }
+        )
+
+
+            .then(function(response) {
+
+                return response.text();
+
+            })
+
+
+            .then(function(data) {
+
+
+                document.getElementById(
+                    "message"
+                ).innerText = data;
+
+
+                /*
+                   Reload orders
+                */
+
+                loadOrders();
+
+            })
+
+
+            .catch(function(error) {
+
+                console.error(error);
+
+                document.getElementById(
+                    "message"
+                ).innerText =
+                    "Failed to update order status!";
+
+            });
+
+    }
+
+
+
+    /* =========================
+       PAGE LOAD
+    ========================= */
+
+    loadOrders();
+
+
+</script>
+
+
+</body>
+
+</html>
+
